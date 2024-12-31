@@ -1,0 +1,108 @@
+{% extends 'layout/base.html' %}
+
+{% block title %} Lập Phiếu {% endblock %}
+
+{% block content %}
+<style>
+    .search-box {
+        display: flex;
+        align-items: center;
+        max-width: 350px;
+        margin: 10px auto;
+    }
+    .searchInput {
+        flex: 1;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px 0 0 5px;
+    }
+    .search-button {
+        padding: 10px 15px;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        border-radius: 0 5px 5px 0;
+        cursor: pointer;
+    }
+
+    .search-results {
+        display: none;
+        width: 50%;
+        margin: 20px auto;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+    }
+    .show-results {
+        display: block !important;
+    }
+</style>
+
+<script>
+    function showResults() {
+        var results = document.getElementById("searchResults");
+        results.classList.add("show-results");
+
+        var searchInput = document.querySelector(".searchInput");
+        var keyword = searchInput.value.toLowerCase();
+
+        var results = document.getElementById("searchResults");
+        var cardTitles = results.getElementsByClassName("card-title");
+
+        var hasResults = false;
+
+        for (var i = 0; i < cardTitles.length; i++) {
+            var cardTitle = cardTitles[i];
+            var cardText = cardTitle.nextElementSibling; // Assuming the next element is the <p> tag
+            var card = cardTitle.closest(".card");
+
+            // Check both card title and card text for the keyword
+            if (cardTitle.textContent.toLowerCase().includes(keyword) ||
+                cardText.textContent.toLowerCase().includes(keyword)) {
+                card.style.display = "block";
+                hasResults = true;
+            } else {
+                card.style.display = "none";
+            }
+        }
+
+        results.style.display = hasResults ? "block" : alert("Không tìm thấy!!!");
+    }
+
+    function showConfirmation(id) {
+        if (confirm("Xác nhận hủy phòng?")) {
+            alert("Hủy phòng thành công!");
+            window.location.href = `/createform/${id}`; // Chuyển hướng đến route xóa
+        } else {
+            alert("Hủy phòng thất bại!");
+        }
+    }
+</script>
+<h1 class="text-center p-5">LẬP PHIẾU THUÊ PHÒNG</h1>
+<div class="search-box">
+    <input class="searchInput" type="text" placeholder="Nhập thông tin khách hàng">
+    <button class="search-button" type="submit" onclick="showResults()">Tìm</button>
+</div>
+
+<div id="searchResults" class="search-results">
+    <h2 class="mb-3">KẾT QUẢ TÌM KIẾM</h2>
+    <div class="search-body row">
+        {% for r in roomform %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <img class="card-img-top" src="https://cdn.iconscout.com/icon/free/png-256/free-avatar-372-456324.png"
+                         alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ r.tenLoaiPhong }}</h4>
+                        <p class="card-text">Đã đặt trước</p>
+                        <a href="{{ url_for('room_form', id=r.id) }}" class="btn btn-primary">In phiếu</a>
+                        <button class="btn btn-danger" onclick="showConfirmation({{ r.id }})">Hủy</button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

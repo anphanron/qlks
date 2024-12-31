@@ -1,0 +1,45 @@
+{% extends 'layout/base.html' %}
+
+{% block title %} Xem phòng {% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 mb-5">
+    <h1 class="text-center mb-4 display-4" style="font-family: 'Montserrat', sans-serif;">XEM PHÒNG</h1>
+    <div class="card shadow-lg p-3 mb-5 bg-body rounded">
+        <div class="row g-0">
+            <div class="col-md-5">
+                <img src="{{ room.hinhAnh }}" class="img-fluid rounded-start" alt="{{ room.soPhong }}" style="height: 100%; object-fit: cover;">
+            </div>
+            <div class="col-md-7">
+                <div class="card-body">
+                    <h3 class="card-title" style="font-family: 'Playfair Display', serif; color: #d4ac0d;">
+                        {{ room.soPhong }}
+                    </h3>
+                    <p class="card-text" style="line-height: 1.6;">{{ room.moTa }}</p>
+                    <p class="card-text"><b>Loại phòng:</b> {{ room.loaiphong.tenLoaiPhong }}</p>
+                    <p class="card-text"><b>Đơn giá:</b> <span style="color: #d4ac0d;">{{ "{:,.0f}".format(room.donGia) }} VNĐ</span></p>
+                    <p class="card-text"><b>Tình trạng:</b>
+                        {% if room.tinhTrang == room.tinhTrang.TRONG %}
+                            <span class="badge rounded-pill bg-success">Còn phòng</span>
+                        {% elif room.tinhTrang == room.tinhTrang.DANG_SU_DUNG %}
+                            <span class="badge rounded-pill bg-warning">Đang sử dụng</span>
+                        {% elif room.tinhTrang == room.tinhTrang.BAO_TRI %}
+                            <span class="badge rounded-pill bg-danger">Bảo trì</span>
+                        {% endif %}
+                    </p>
+                    <div class="mt-3">
+                        <form action="{{url_for('book_room')}}" method="post">
+                            <button type="submit" class="btn btn-lg"
+                                    style="background-color: #d4ac0d; color: white; border-radius: 8px;">
+                                <a href="/booking"><i class="fas fa-calendar-check me-2"></i>Đặt Phòng</a>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

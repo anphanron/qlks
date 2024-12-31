@@ -1,0 +1,74 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4 display-4" style="font-family: 'Times New Roman', serif;">THỐNG KÊ BÁO CÁO</h1>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title">Doanh thu theo tháng</h4>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title">Tỉ lệ đặt phòng theo loại phòng</h4>
+                    <canvas id="roomTypeChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title">Top 5 phòng có doanh thu cao nhất</h4>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Số phòng</th>
+                            <th>Loại phòng</th>
+                            <th>Doanh thu</th>
+                        </tr>
+                        </thead>
+                        <tbody id="topRoomsTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Dữ liệu doanh thu
+const revenueData = {
+    labels: {{ revenue_data.labels | tojson }},
+    datasets: [{
+        label: 'Doanh thu (VNĐ)',
+        data: {{ revenue_data.data | tojson }},
+        // ...
+    }]
+};
+
+// Dữ liệu tỉ lệ đặt phòng
+const roomTypeData = {
+    labels: {{ room_type_data.labels | tojson }},
+    datasets: [{
+        label: 'Tỉ lệ đặt phòng (%)',
+        data: {{ room_type_data.data | tojson }},
+        // ...
+    }]
+};
+
+// Dữ liệu top 5 phòng
+const topRoomsData = {{ top_rooms_data | tojson }};
+</script>
+{% endblock %}

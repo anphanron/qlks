@@ -1,0 +1,43 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Trang chủ{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 50px;">
+    {% if current_user.is_authenticated %}
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center">Xin Chào, {{ current_user.hoTen }}!</h2>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        {% for r in rooms %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+            <div class="card h-100">
+                <img src="{{ r.hinhAnh }}" class="card-img-top" alt="{{ r.soPhong }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ r.soPhong }}</h5>
+                    <p class="card-text">Loại phòng: {{ r.loaiphong.tenLoaiPhong }}</p>
+                    <p class="card-text">Đơn giá: {{ "{:,.0f}".format(r.donGia) }} VNĐ</p>
+                    <a href="{{ url_for('details', id=r.maPhong) }}" class="btn btn-dark w-100">Xem phòng</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <ul class="pagination justify-content-center">
+                {% for i in range(pages) %}
+                <li class="page-item {% if request.args.get('page')|int == i + 1 or (request.args.get('page') == None and i == 0) %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('index', page=i+1, kw=request.args.get('kw'), type_id=request.args.get('type_id'), pricefrom=request.args.get('pricefrom'), priceto=request.args.get('priceto')) }}">{{ i+1 }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

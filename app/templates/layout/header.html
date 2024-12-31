@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-md navbar-light"
+     style="background: linear-gradient(to right, #0f2027, #203a43, #2c5364);">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="https://cdn.haitrieu.com/wp-content/uploads/2021/09/Logo-DH-Mo-TPHCM-OU.png"
+                 style="width: 50px; margin-right: 10px;">
+            <span style="font-family: 'Arial', sans-serif; font-size: 1.5rem; color: white; font-weight: bold;">ATA Hotel</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/" style="color: white; margin: 0 10px;">Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/booking" style="color: white; margin: 0 10px;">Đặt phòng</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/createform" style="color: white; margin: 0 10px;">Lập phiếu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pay" style="color: white; margin: 0 10px;">Thanh toán</a>
+                </li>
+                {% endif %}
+            </ul>
+            <div class="d-flex ms-auto align-items-center">
+                {% if current_user.is_authenticated %}
+                <form class="d-flex" role="search" method="get" action="/logout" style="margin-right: 10px">
+                    <button class="btn btn-outline-light" type="submit" style="border-radius: 5px">Đăng xuất</button>
+                </form>
+                {% else %}
+                <form class="d-flex" role="search" method="get" action="/login" style="margin-right: 10px">
+                    <button class="btn btn-outline-light" type="submit" style="border-radius: 5px">Đăng nhập</button>
+                </form>
+                {% endif %}
+                <form class="d-flex" role="search" method="get" action="/" style="margin-right: 10px">
+                    <input class="form-control me-2" type="search" name="pricefrom" placeholder="Giá từ"
+                           aria-label="Search" style="border-radius: 20px;">
+                    <input class="form-control me-2" type="search" name="priceto" placeholder="Đến" aria-label="Search"
+                           style="border-radius: 20px;">
+                    <button class="btn btn-outline-light" type="submit" style="border-radius: 5px;">Tìm</button>
+                </form>
+                <form class="d-flex" role="search" method="get" action="/">
+                    <input class="form-control me-2" type="search" name="kw" placeholder="Tìm theo tên"
+                           aria-label="Search" style="border-radius: 20px;">
+                    <button class="btn btn-outline-light" type="submit" style="border-radius: 5px;">Tìm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>

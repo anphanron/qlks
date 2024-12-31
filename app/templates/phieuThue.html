@@ -1,0 +1,81 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Phiếu Thuê Phòng{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f5f7;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .container h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .container form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container label {
+        margin-bottom: 5px;
+    }
+
+    .container input,
+    .container textarea {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 3px;
+        border: 1px solid #ccc;
+    }
+
+    .container .btn {
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    .container .btn:hover {
+        background-color: #45a049;
+    }
+</style>
+<div class="container">
+    <h1 class="text-center mb-4">PHIẾU THUÊ PHÒNG</h1>
+    <form action="{{ url_for('bill', id=roomform.id) }}" method="POST">
+
+        <label for="name">Tên khách hàng:</label>
+        <input type="text" id="name" name="name" value="{{ roomform.tenLoaiPhong }}" readonly>
+
+        <label for="check-in">Ngày nhận:</label>
+        <input type="text" id="check-in" name="check-in" value="{{ roomform.ngayNhan.strftime('%d/%m/%Y') if roomform.ngayNhan }}" readonly>
+
+        <label for="check-out">Ngày trả:</label>
+        <input type="text" id="check-out" name="check-out" value="{{ roomform.ngayTra.strftime('%d/%m/%Y') if roomform.ngayTra }}" readonly>
+
+
+        <label for="type-room">Loại phòng:</label>
+        <input type="text" id="type-room" name="type-room" value="{{ roomform.tenLoaiPhong }}" readonly>
+
+        <label for="count">Số người ở:</label>
+        <input type="text" id="count" name="count" value="Tối đa {{ roomform.soKhachToiDa }} người" readonly>
+
+        <button type="submit" class="btn">In Phiếu</button>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Đặt Phòng{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mt-5 display-4" style="font-family: 'Montserrat', sans-serif;">ĐẶT PHÒNG</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-4 shadow"
+                 style="background-color: #fff; border-radius: 10px; position: relative; overflow: hidden;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form id="myForm" action="{{ url_for('book_room') }}" method="POST"
+                              onsubmit="return showConfirmation();">
+                            <div class="mb-3">
+                                <label for="nameuser" class="form-label fw-bold">Họ tên</label>
+                                <input type="text" class="form-control" id="nameuser" placeholder="Họ và Tên"
+                                       name="nameuser" required
+                                       {% if current_user.is_authenticated %} value="{{ current_user.hoTen }}" {% endif %}>
+                            </div>
+                            <div class="mb-3">
+                                <label for="check-in" class="form-label fw-bold">Ngày nhận</label>
+                                <input type="date" class="form-control" id="check-in" placeholder="Ngày nhận"
+                                       name="check-in" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="check-out" class="form-label fw-bold">Ngày trả</label>
+                                <input type="date" class="form-control" id="check-out" placeholder="Ngày trả"
+                                       name="check-out" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Số người ở</label>
+                                <div class="d-flex">
+                                    <div class="form-check me-3">
+                                        <input class="form-check-input" type="radio" name="count" id="count1" value="1"
+                                               required>
+                                        <label class="form-check-label" for="count1">
+                                            1
+                                        </label>
+                                    </div>
+                                    <div class="form-check me-3">
+                                        <input class="form-check-input" type="radio" name="count" id="count2" value="2">
+                                        <label class="form-check-label" for="count2">
+                                            2
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="count" id="count3" value="3">
+                                        <label class="form-check-label" for="count3">
+                                            3
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="type-room" class="form-label fw-bold">Loại phòng</label>
+                                <select name="type-room" id="type-room" class="form-select" required>
+                                    <option value="" selected disabled>Chọn loại phòng</option>
+                                    {% for r in typeroom %}
+                                    <option value="{{ r.tenLoaiPhong }}" {% if room and r.tenLoaiPhong == room.loaiphong.tenLoaiPhong %}selected{% endif %}>
+                                        {{ r.tenLoaiPhong }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3" id="roomInfo" {% if not room %}style="display: none;"{% endif %}>
+                                {% if room %}
+                                <p class="fw-bold">Phòng đã chọn:</p>
+                                <p>Số phòng: {{ room.soPhong }}</p>
+                                <p>Loại phòng: {{ room.loaiphong.tenLoaiPhong }}</p>
+                                <p>Đơn giá: {{ "{:,.0f}".format(room.donGia) }} VNĐ</p>
+                                {% endif %}
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-lg"
+                                    style="border-radius: 20px; background-color: #FF4B2B; color: #FFFFFF;">
+                                Xác nhận
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="overlay-container h-100">
+                            <div class="overlay">
+                                <div class="overlay-panel overlay-right text-center p-4">
+                                    <h2 class="fw-bold">CHÀO, BẠN!</h2>
+                                    <p>Cung cấp thông tin của bạn để tiếp tục</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    {% if current_user.is_authenticated %}
+        function showConfirmation() {
+            if (confirm("Xác nhận đặt phòng?")) {
+                alert("Đặt phòng thành công!");
+                return true;
+            } else {
+                alert("Đặt phòng thất bại!");
+                return false;
+            }
+        }
+    {% else %}
+        function showConfirmation() {
+            alert("Vui lòng đăng nhập để tiếp tục");
+            window.location.href = "{{ url_for('login') }}";
+            return false;
+        }
+    {% endif %}
+</script>
+
+<style>
+    .overlay-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 10; /* Đảm bảo overlay nằm trên form */
+    }
+
+    .overlay {
+        background: #FF416C;
+        background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
+        background: linear-gradient(to right, #FF4B2B, #FF416C);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 0 0;
+        color: #FFFFFF;
+        position: relative;
+        width: 100%; /* Chiều rộng bằng với overlay-container */
+        height: 100%;
+        transform: translateX(0);
+    }
+
+    .overlay-panel {
+        position: absolute;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 40px;
+        height: 100%;
+        width: 100%; /* Chiều rộng bằng với overlay */
+        text-align: center;
+        transform: translateX(0);
+    }
+
+    .overlay-right {
+        right: 0;
+        transform: translateX(0);
+    }
+</style>
+{% endblock %}
